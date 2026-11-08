@@ -1,0 +1,12 @@
+create extension if not exists pgcrypto;
+create table templates(id uuid primary key default gen_random_uuid(),name text not null,source text,issues jsonb not null default '[]',copied_from uuid references templates(id) on delete set null,created_at timestamptz default now());
+create table sections(id uuid primary key default gen_random_uuid(),template_id uuid not null references templates(id) on delete cascade,pos int not null,name text not null);
+create table items(id uuid primary key default gen_random_uuid(),section_id uuid not null references sections(id) on delete cascade,pos int not null,name text not null);
+create table comments(id uuid primary key default gen_random_uuid(),item_id uuid not null references items(id) on delete cascade,pos int not null,name text not null default '',body text not null default '',extra jsonb not null default '{}');
+create index on sections(template_id,pos);
+create index on items(section_id,pos);
+create index on comments(item_id,pos);
+alter table templates enable row level security;
+alter table sections enable row level security;
+alter table items enable row level security;
+alter table comments enable row level security;

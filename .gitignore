@@ -1,0 +1,14 @@
+node_modules
+.next
+.env
+.env*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+.vercel
+build
+dist
+.DS_Store
+Thumbs.db
