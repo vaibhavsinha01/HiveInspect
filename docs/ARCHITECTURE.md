@@ -1,25 +1,32 @@
 # Architecture
 
+```text
+Browser pages
+  -> Next.js route handlers
+     -> src/lib/import: deterministic spreadsheet parsing and import report
+     -> src/lib/db: Supabase repository functions
+        -> Postgres: import_template() writes the tree atomically
 ```
-Browser (Next.js pages)
-  -> src/app/api/*          HTTP only: parse request, call a repository function, return JSON
-       -> src/lib/import/   pure functions: spreadsheet bytes -> { tree, issues } (no I/O)
-       -> src/lib/db/       repository: list, load, save, update, copy
-            -> Postgres     import_template() writes the whole tree in one transaction
-```
+
+## Data flow
+
+The list page uploads `.xls`, `.xlsx`, or `.csv` files to `POST /api/templates`. The route parses the first sheet and stores the template through the `import_template()` function. The editor loads a structured tree, then saves individual whitelisted fields through `PATCH /api/nodes/[table]/[id]`. Copying reuses the tree writer; deleting a template cascades through its children.
 
 ## Decisions
-- Parsing is deterministic and has no database access, so it is unit-tested against the committed fixture.
-- Import and copy both go through `import_template()`. Any failure rolls back the whole template, so no partial imports exist.
-- Edits go through a whitelist of tables and fields in `src/lib/db/templates.js`.
-- Comment text is stored as exported HTML; unmapped Spectora columns are kept in `comments.extra` (jsonb).
-- The service-role key is used only on the server. Row level security is enabled with no public policies.
 
-## Folders
-- `src/app` pages and API routes
-- `src/lib/import` column rules, entity decoding, parser
-- `src/lib/db` Supabase client and repository
-- `supabase/migrations` numbered SQL, run in order
-- `fixtures` committed Spectora export
-- `tests` parser tests (always) and database tests (need env vars)
-- `scripts` seed
+- Parsing is deterministic. Gemini is an optional header-only mapping fallback; its output is validated before parsing.
+- Sections, items, and comments are separate ordered rows to support editing and searching. Comment body HTML remains as exported, and unmapped columns are stored in `comments.extra`.
+- `templates.issues` stores the import report, including row counts, mapping notes, and unmapped-column notes.
+- The Supabase service key stays server-side. Row-level security is enabled without public policies.
+- Health checks expose only `{ ok, db }`; logs record JSON event metadata and never spreadsheet content or credentials.
+
+## Paths
+
+- `src/app`: pages and API routes, including `/api/health`
+- `src/lib/import`: parser and Spectora header rules
+- `src/lib/db`: Supabase client and repository
+- `supabase/migrations`: apply `001_schema.sql`, then `002_import_function.sql`; add future schema changes as a new `003_*.sql`
+- `fixtures`: committed source export
+- `tests`: deterministic parser, fixture, AI mapping, API validation, and optional database tests
+
+The app can run on Vercel or in the provided Node 20 Docker image. Supabase remains external.
