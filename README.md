@@ -5,7 +5,7 @@
 
 Imports a Spectora "Export HTML Text" spreadsheet into a structured template (templates → sections → items → comments). You can edit it, revert comment text, duplicate it, and everything persists in Supabase Postgres.
 
-**Input file:** Spectora template "<template name, e.g. InterNACHI Residential>", exported via *Export to spreadsheet → Export HTML Text*, committed at `fixtures/spectora-export.xls`. It contains no customer data.
+**Input file:** Spectora template "<template name, e.g. InterNACHI Residential>", exported via _Export to spreadsheet → Export HTML Text_, committed at `fixtures/spectora-export.xls`. It contains no customer data.
 
 **Features:** import with an import report, edit section/item names and comment text (rich text or raw HTML), revert comment text, search comments, duplicate a template as an independent copy.
 
