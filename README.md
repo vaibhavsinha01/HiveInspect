@@ -95,3 +95,5 @@ The service key stays server-side. Row level security is enabled on all tables, 
 - **"Server is missing SUPABASE_URL or SUPABASE_SERVICE_KEY":** the `.env` file is missing or misnamed. Run `cp .env.example .env` (`copy` on Windows), fill both values, make sure it isn't named `.env.txt`, then restart `npm run dev`.
 - **"Could not find the function import_template":** run `002_import_function.sql`, then `notify pgrst, 'reload schema';`.
 - Keep the project outside OneDrive-synced folders if installs or the dev server behave oddly.
+
+**Live app:** [https://hiveinspect.vercel.app](https://hiveinspect.vercel.app) (no login required)
