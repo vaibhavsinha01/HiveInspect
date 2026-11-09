@@ -26,14 +26,14 @@ The example template in the repo is the Residential template exported from Spect
 
 ## Checks
 
-| Test | What it covers |
-| --- | --- |
-| `tests/parse.test.js` | Ordering, fill-down, HTML, extra columns, blank rows, malformed input |
-| `tests/fixture.test.js` | Fixture totals, decoded names, preserved HTML bodies |
-| `tests/ai.test.js` | Mapping validation and parser use of a validated mapping |
-| `tests/api-validation.test.js` | UUID, table, field, type, and length validation |
-| `tests/roundtrip.test.js` | Source rows compared with parser output, plus optional save/load comparison |
-| `tests/db.test.js` | Copy independence and atomic failure (needs reachable Supabase credentials) |
+| Test                           | What it covers                                                              |
+| ------------------------------ | --------------------------------------------------------------------------- |
+| `tests/parse.test.js`          | Ordering, fill-down, HTML, extra columns, blank rows, malformed input       |
+| `tests/fixture.test.js`        | Fixture totals, decoded names, preserved HTML bodies                        |
+| `tests/ai.test.js`             | Mapping validation and parser use of a validated mapping                    |
+| `tests/api-validation.test.js` | UUID, table, field, type, and length validation                             |
+| `tests/roundtrip.test.js`      | Source rows compared with parser output, plus optional save/load comparison |
+| `tests/db.test.js`             | Copy independence and atomic failure (needs reachable Supabase credentials) |
 
 Commands: `npm run format`, `npm run format:check`, `npm test`, `npm run build`, `npm run test:db`.
 
